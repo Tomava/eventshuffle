@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getEvents, getOneEvent, createEvent, addVote } from "../services/eventService";
+import { getEvents, getOneEvent, createEvent, addVote, getResult } from "../services/eventService";
 
 export const getEventsController = async (req: Request, res: Response) => {
   try {
@@ -65,17 +65,17 @@ export const addVoteController = async (req: Request, res: Response) => {
   }
 };
 
-// export const getResultController = async (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   if (!id) {
-//     res.status(400).json({ error: "Invalid event ID" });
-//   }
+export const getResultController = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (!id) {
+    res.status(400).json({ error: "Invalid event ID" });
+  }
 
-//   try {
-//     const event = await getResult(id);
-//     res.status(200).json(event);
-//   } catch (err: unknown) {
-//     console.error(err);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// };
+  try {
+    const event = await getResult(id);
+    res.status(200).json(event);
+  } catch (err: unknown) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

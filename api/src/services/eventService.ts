@@ -1,6 +1,6 @@
 import { DB_CONFIG } from "../config";
 import db from "../database/db";
-import { Event, NewVote } from "../models/eventModel";
+import { Event, EventResult, NewVote } from "../models/eventModel";
 
 export const getEvents = async (): Promise<Event[]> => {
   try {
@@ -87,6 +87,40 @@ export const addVote = async (
     if (err instanceof Error) {
       console.error("Error adding vote:", err.message);
       throw new Error("Error adding vote: " + err.message);
+    } else {
+      console.error("An unknown error occurred");
+      throw new Error("An unknown error occurred");
+    }
+  }
+};
+
+export const getResult = async (id: string): Promise<EventResult | null> => {
+  try {
+    const event: Event | null = await db(DB_CONFIG.EVENTS_TABLE)
+      .where({ id })
+      .first();
+
+    const allNames = (
+      await db(DB_CONFIG.VOTES_TABLE)
+        .where({ event_id: id })
+        .distinct("name")
+        .select("name")
+    ).map((row) => row.name);
+
+    const suitableDates = await db(DB_CONFIG.VOTES_TABLE)
+      .where({ event_id: id })
+      .groupBy("date")
+      .orderBy("date")
+      .havingRaw(`
+        array_agg(name ORDER BY name) = ?`, [allNames])
+      .select(db.raw("date, array_agg(name) as people"));
+
+    return event ? { ...event, suitableDates } : null;
+  } catch (err: unknown) {
+    // TODO: Simplify error handling
+    if (err instanceof Error) {
+      console.error("Error fetching event:", err.message);
+      throw new Error("Error fetching event: " + err.message);
     } else {
       console.error("An unknown error occurred");
       throw new Error("An unknown error occurred");
