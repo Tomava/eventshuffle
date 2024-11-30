@@ -64,3 +64,18 @@ export const addVoteController = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+// export const getResultController = async (req: Request, res: Response) => {
+//   const { id } = req.params;
+//   if (!id) {
+//     res.status(400).json({ error: "Invalid event ID" });
+//   }
+
+//   try {
+//     const event = await getResult(id);
+//     res.status(200).json(event);
+//   } catch (err: unknown) {
+//     console.error(err);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };

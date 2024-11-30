@@ -7,5 +7,6 @@ router.get("/event/list", getEventsController);
 router.get("/event/:id", getOneEventController);
 router.post("/event", createEventController);
 router.post("/event/:id/vote", addVoteController);
+// outer.get("/event/:id/results", getResultController);
 
 export default router;

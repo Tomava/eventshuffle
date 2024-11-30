@@ -1,8 +1,8 @@
-import mongoose, { Schema } from "mongoose";
-
 export interface Vote {
+  id: string;
+  event_id: string;
+  name: string;
   date: Date;
-  people: string[];
 }
 
 export interface NewVote {
@@ -10,47 +10,18 @@ export interface NewVote {
   votes: Date[];
 }
 
+export interface EventVote {
+  date: string;
+  people: string[];
+}
+
 export interface Event {
   id: string;
   name: string;
   dates?: Date[];
-  votes?: Vote[];
+  votes?: EventVote[];
 }
 
-const VoteSchema: Schema = new Schema(
-  {
-    date: { type: String, required: true },
-    people: { type: [String], required: true },
-  },
-  {
-    toJSON: {
-      transform: function (_doc, ret) {
-        // Remove fields from JSON
-        delete ret._id;
-        delete ret.__v;
-      },
-    },
-  }
-);
-
-const EventSchema: Schema = new Schema(
-  {
-    name: { type: String, required: true },
-    dates: { type: [String], required: false },
-    votes: { type: [VoteSchema], required: false },
-  },
-  {
-    toJSON: {
-      transform: function (_doc, ret) {
-        // Rename field
-        ret.id = ret._id;
-        // Remove fields from JSON
-        delete ret._id;
-        delete ret.__v;
-      },
-    },
-  }
-);
-
-export const EventModel = mongoose.model<Event>("Event", EventSchema);
-export const VoteModel = mongoose.model<Vote>("Vote", VoteSchema);
+export interface EventResult extends Event {
+  suitableDates: Vote[];
+}

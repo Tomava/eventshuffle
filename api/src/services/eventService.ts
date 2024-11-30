@@ -1,9 +1,10 @@
-import { EventModel, NewVote } from "../models/eventModel";
-import { Event } from "../models/eventModel";
+import { DB_CONFIG } from "../config";
+import db from "../database/db";
+import { Event, NewVote } from "../models/eventModel";
 
 export const getEvents = async (): Promise<Event[]> => {
   try {
-    const events = await EventModel.find().select('_id name');;
+    const events = await db(DB_CONFIG.EVENTS_TABLE).select("*");
     return events;
   } catch (err: unknown) {
     // TODO: Simplify error handling
@@ -19,7 +20,7 @@ export const getEvents = async (): Promise<Event[]> => {
 
 export const getOneEvent = async (id: string): Promise<Event | null> => {
   try {
-    const event = await EventModel.findById(id);
+    const event = await db(DB_CONFIG.EVENTS_TABLE).where({ id }).first();
     return event;
   } catch (err: unknown) {
     // TODO: Simplify error handling
@@ -37,9 +38,8 @@ export const createEvent = async (
   event: Omit<Event, "id">
 ): Promise<Event> => {
   try {
-    const newEvent = new EventModel(event);
-    await newEvent.save();
-    return newEvent;
+    const newEvent = await db(DB_CONFIG.EVENTS_TABLE).insert(event).returning("*");
+    return {name: "test", id: "test"};
   } catch (err: unknown) {
     // TODO: Simplify error handling
     if (err instanceof Error) {
@@ -56,26 +56,8 @@ export const addVote = async (
   id: string, newVote: NewVote
 ): Promise<Event | null> => {
   try {
-    const event = await EventModel.findById(id);
-    
-    if (!event) {
-      return null;
-    }
+    return {name: "test", id: "test"};
 
-    const { name, votes: newVotes } = newVote;
-
-    newVotes.map((date) => {
-      const existingVote = event.votes?.find(vote => vote.date === date);
-      if (!existingVote) {
-        event.votes?.push({ date, people: [name] });
-      } else if (!existingVote.people.some((person) => person === name)) {
-        existingVote.people.push(name);
-      }
-    })
-
-    const updatedEvent = await event.save();
-
-    return updatedEvent;
   } catch (err: unknown) {
     // TODO: Simplify error handling
     if (err instanceof Error) {

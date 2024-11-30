@@ -12,5 +12,7 @@ export const DB_CONFIG = {
   DB: process.env.DB || "db",
   DB_PASSWORD:
     process.env.DB_PASSWORD || "grY3ANahkuXxUqRT8nztVHKDsjEL7cb2JB4MyepP",
-  DB_PORT: Number(process.env.DB_PORT) || 27017,
+  DB_PORT: Number(process.env.DB_PORT) || 5431,
+  EVENTS_TABLE: "events",
+  VOTES_TABLE: "votes",
 };
