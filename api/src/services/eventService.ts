@@ -6,6 +6,7 @@ export const getEvents = async (): Promise<Event[]> => {
     const events = await EventModel.find();
     return events;
   } catch (err: unknown) {
+    // TODO: Simplify error handling
     if (err instanceof Error) {
       console.error("Error fetching events:", err.message);
       throw new Error("Error fetching events: " + err.message);
@@ -14,21 +15,23 @@ export const getEvents = async (): Promise<Event[]> => {
       throw new Error("An unknown error occurred");
     }
   }
+};
 
-  // // TODO: Test data
-  // const events: Event[] = [
-  //   {
-  //     id: "48308fcb-80c7-45cd-8c18-b1c35087b813",
-  //     name: "Jake's secret party",
-  //   },
-  //   {
-  //     id: "a2392d04-d939-428a-bdcf-af0580c27810",
-  //     name: "Bowling night",
-  //   },
-  //   {
-  //     id: "e90a6f3f-a393-482a-a157-8b9bbd4afa6c",
-  //     name: "Tabletop gaming",
-  //   },
-  // ];
-  // return events;
+export const createEvent = async (
+  event: Omit<Event, "id">
+): Promise<Event> => {
+  try {
+    const newEvent = new EventModel(event);
+    await newEvent.save();
+    return newEvent;
+  } catch (err: unknown) {
+    // TODO: Simplify error handling
+    if (err instanceof Error) {
+      console.error("Error creating event:", err.message);
+      throw new Error("Error creating event: " + err.message);
+    } else {
+      console.error("An unknown error occurred");
+      throw new Error("An unknown error occurred");
+    }
+  }
 };
