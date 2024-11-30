@@ -61,7 +61,7 @@ export const addVoteController = async (req: Request, res: Response) => {
     res.status(201).json(updatedEvent);
   } catch (err: unknown) {
     console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(400).json({ error: "Already exists" });
   }
 };
 

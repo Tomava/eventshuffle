@@ -20,8 +20,17 @@ export const getEvents = async (): Promise<Event[]> => {
 
 export const getOneEvent = async (id: string): Promise<Event | null> => {
   try {
-    const event = await db(DB_CONFIG.EVENTS_TABLE).where({ id }).first();
-    return event;
+    const event: Event | null = await db(DB_CONFIG.EVENTS_TABLE)
+      .where({ id })
+      .first();
+
+    const votes = await db(DB_CONFIG.VOTES_TABLE)
+      .where({ event_id: id })
+      .groupBy("date")
+      .orderBy("date")
+      .select(db.raw("date, array_agg(name) as people"));
+
+    return event ? { ...event, votes } : null;
   } catch (err: unknown) {
     // TODO: Simplify error handling
     if (err instanceof Error) {
@@ -34,12 +43,12 @@ export const getOneEvent = async (id: string): Promise<Event | null> => {
   }
 };
 
-export const createEvent = async (
-  event: Omit<Event, "id">
-): Promise<Event> => {
+export const createEvent = async (event: Omit<Event, "id">): Promise<Event> => {
   try {
-    const newEvent = await db(DB_CONFIG.EVENTS_TABLE).insert(event).returning("*");
-    return {name: "test", id: "test"};
+    const newEvent = (
+      await db(DB_CONFIG.EVENTS_TABLE).insert(event).returning<Event[]>("*")
+    )[0];
+    return newEvent;
   } catch (err: unknown) {
     // TODO: Simplify error handling
     if (err instanceof Error) {
@@ -53,11 +62,26 @@ export const createEvent = async (
 };
 
 export const addVote = async (
-  id: string, newVote: NewVote
+  id: string,
+  newVote: NewVote
 ): Promise<Event | null> => {
   try {
-    return {name: "test", id: "test"};
+    const event: Event | null = await db(DB_CONFIG.EVENTS_TABLE)
+      .where({ id })
+      .first();
 
+    if (!event) {
+      return null;
+    }
+
+    const promises = newVote.votes.map(async (date) => {
+      const voteObject = { event_id: event.id, name: newVote.name, date };
+      return db(DB_CONFIG.VOTES_TABLE).insert(voteObject);
+    });
+
+    await Promise.all(promises);
+
+    return await getOneEvent(id);
   } catch (err: unknown) {
     // TODO: Simplify error handling
     if (err instanceof Error) {
