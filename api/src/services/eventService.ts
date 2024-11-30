@@ -68,7 +68,7 @@ export const addVote = async (
       const existingVote = event.votes?.find(vote => vote.date === date);
       if (!existingVote) {
         event.votes?.push({ date, people: [name] });
-      } else {
+      } else if (!existingVote.people.some((person) => person === name)) {
         existingVote.people.push(name);
       }
     })
