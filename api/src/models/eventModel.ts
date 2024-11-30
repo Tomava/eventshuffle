@@ -1,8 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface Vote {
-  date: Date[];
+  date: Date;
   people: string[];
+}
+
+export interface NewVote {
+  name: string;
+  votes: Date[];
 }
 
 export interface Event {
@@ -12,10 +17,21 @@ export interface Event {
   votes?: Vote[];
 }
 
-const VoteSchema: Schema = new Schema({
-  date: { type: String, required: true },
-  people: { type: [String], required: true },
-});
+const VoteSchema: Schema = new Schema(
+  {
+    date: { type: String, required: true },
+    people: { type: [String], required: true },
+  },
+  {
+    toJSON: {
+      transform: function (_doc, ret) {
+        // Remove fields from JSON
+        delete ret._id;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 const EventSchema: Schema = new Schema(
   {
@@ -36,5 +52,5 @@ const EventSchema: Schema = new Schema(
   }
 );
 
-
 export const EventModel = mongoose.model<Event>("Event", EventSchema);
+export const VoteModel = mongoose.model<Vote>("Vote", VoteSchema);
