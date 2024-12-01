@@ -48,8 +48,6 @@ describe("API Endpoints", () => {
     const uuidRegex =
       /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
     expect(response.body.id).toMatch(uuidRegex);
-    // TODO: REMOVE THIS
-    expect(1).toBe(0);
   });
 
   it("should get events", async () => {
