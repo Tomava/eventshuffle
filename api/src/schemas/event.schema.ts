@@ -8,6 +8,9 @@ export const createEventSchema = z.object({
   dates: z.array(z.string().date()),
 });
 
-// TODO: Validate IDs
+export const eventIdSchema = z.object({
+  id: z.string().uuid("ID must be a valid UUID."),
+});
+
 
 export type CreateEventInput = z.infer<typeof createEventSchema>;
