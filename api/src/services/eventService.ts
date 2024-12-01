@@ -4,7 +4,7 @@ import { Event, EventResult, NewVote } from "../models/eventModel";
 
 export const getEvents = async (): Promise<Event[]> => {
   try {
-    const events = await db(DB_CONFIG.EVENTS_TABLE).select("*");
+    const events = await db(DB_CONFIG.EVENTS_TABLE).select("id", "name");
     return events;
   } catch (err: unknown) {
     // TODO: Simplify error handling
