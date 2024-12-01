@@ -8,4 +8,6 @@ export const createEventSchema = z.object({
   dates: z.array(z.string().date()),
 });
 
+// TODO: Validate IDs
+
 export type CreateEventInput = z.infer<typeof createEventSchema>;
