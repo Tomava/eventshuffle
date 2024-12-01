@@ -1,6 +1,6 @@
 services:
   db-test:
-    image: postgres:17.2
+    image: postgres:17.2-alpine
     environment:
       - POSTGRES_DB=test_db
       - POSTGRES_USER=test_user
