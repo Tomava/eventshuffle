@@ -5,6 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY src/ ./src
 COPY tsconfig.json ./
+COPY jest.config.ts ./
 
 RUN chown -R node:node /app
 
@@ -16,4 +17,4 @@ RUN npm run build
 
 # TODO: Separate build step
 
-CMD ["npm", "start"]
+CMD ["npm", "run fresh-start"]

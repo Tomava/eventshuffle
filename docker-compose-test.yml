@@ -1,0 +1,32 @@
+services:
+  db-test:
+    image: postgres:17.2
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=test_db
+      - POSTGRES_USER=test_user
+      - POSTGRES_PASSWORD=test
+    networks:
+      - eventshuffletest-network
+
+  api-test:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    command: npm run test
+    depends_on:
+      - db-test
+    environment:
+      - DB_USER=test_user
+      - DB_HOST=db-test
+      - DB=test_db
+      - DB_PASSWORD=test
+      - DB_PORT=5432
+      - ENVIRONMENT=test
+      - PORT=3000
+    networks:
+      - eventshuffletest-network
+
+networks:
+  eventshuffletest-network:
+    driver: bridge

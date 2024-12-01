@@ -8,7 +8,8 @@
     "start": "node dist/index.js",
     "dev": "npm run migrate && nodemon src/index.ts",
     "migrate": "knex migrate:latest --knexfile src/knexfile.ts",
-    "fresh-start": "npm run migrate && npm run start"
+    "fresh-start": "npm run migrate && npm run start",
+    "test": "cd src && jest"
   },
   "author": "",
   "license": "ISC",
@@ -23,10 +24,15 @@
   "devDependencies": {
     "@eslint/js": "^9.16.0",
     "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.10.1",
     "@types/pg": "^8.11.10",
+    "@types/supertest": "^6.0.2",
     "@types/uuid": "^10.0.0",
     "eslint": "^9.16.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.16.0"

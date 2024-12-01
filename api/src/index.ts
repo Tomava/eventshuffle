@@ -8,6 +8,8 @@ app.use(express.json());
 
 app.use("/api/v1", eventRoutes);
 
-app.listen(CONFIG.PORT, () => {
+const server = app.listen(CONFIG.PORT, () => {
   console.log(`Server at http://localhost:${CONFIG.PORT}`);
 });
+
+export { app, server };
