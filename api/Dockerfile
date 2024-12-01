@@ -17,4 +17,4 @@ RUN npm run build
 
 # TODO: Separate build step
 
-CMD ["npm", "run fresh-start"]
+CMD ["npm", "run", "fresh-start"]
