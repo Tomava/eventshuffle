@@ -17,10 +17,13 @@ jobs:
           cache: "npm"
       - name: Install node dependencies
         run: npm ci
+        working-directory: ./api
       - name: Lint code
         run: npm run lint
+        working-directory: ./api
       - name: Run build
         run: npm run build
+        working-directory: ./api
       - name: Run tests
         run: docker-compose -f docker-compose-test.yml up -d --build
       - name: Stop and remove containers
