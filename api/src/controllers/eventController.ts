@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
-import { getEvents, getOneEvent, createEvent, addVote, getResult } from "../services/eventService";
+import {
+  getEvents,
+  getOneEvent,
+  createEvent,
+  addVote,
+  getResult,
+} from "../services/eventService";
 
 export const getEventsController = async (req: Request, res: Response) => {
   try {
@@ -57,11 +63,13 @@ export const addVoteController = async (req: Request, res: Response) => {
   }
 
   try {
-    const updatedEvent = await addVote(id, {name, votes});
+    const updatedEvent = await addVote(id, { name, votes });
     res.status(201).json(updatedEvent);
   } catch (err: unknown) {
     console.error(err);
-    res.status(400).json({ error: "Already exists" });
+    res
+      .status(400)
+      .json({ error: "Already Exists", message: "Name already exists" });
   }
 };
 
