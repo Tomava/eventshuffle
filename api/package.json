@@ -9,7 +9,8 @@
     "dev": "npm run migrate && nodemon src/index.ts",
     "migrate": "knex migrate:latest --knexfile src/knexfile.ts",
     "fresh-start": "npm run migrate && npm run start",
-    "test": "cd src && jest"
+    "test": "cd src && jest",
+    "lint": "eslint ./src"
   },
   "author": "",
   "license": "ISC",
