@@ -1,7 +1,8 @@
 import { DB_CONFIG } from "../config";
 import db from "../database/db";
-import { Event, EventResult, NewVote } from "../models/eventModel";
 import { ResponseError } from "../models/error";
+import { Event, EventResult, NewEvent, ID } from "../schemas/event.schema";
+import { NewVote } from "../schemas/vote.schema";
 
 const handleError = (err: unknown) => {
   if (err instanceof Error) {
@@ -26,7 +27,7 @@ export const getEvents = async (): Promise<Event[] | null> => {
   }
 };
 
-export const getOneEvent = async (id: string): Promise<Event | null> => {
+export const getOneEvent = async (id: ID): Promise<Event | null> => {
   try {
     const event: Event | null = await db(DB_CONFIG.EVENTS_TABLE)
       .where({ id })
@@ -50,7 +51,7 @@ export const getOneEvent = async (id: string): Promise<Event | null> => {
 };
 
 export const createEvent = async (
-  event: Omit<Event, "id">
+  event: NewEvent
 ): Promise<Event | null> => {
   try {
     const newEvent = (
@@ -64,7 +65,7 @@ export const createEvent = async (
 };
 
 export const addVote = async (
-  id: string,
+  id: ID,
   newVote: NewVote
 ): Promise<Event | null> => {
   try {
@@ -90,7 +91,7 @@ export const addVote = async (
   }
 };
 
-export const getResult = async (id: string): Promise<EventResult | null> => {
+export const getResult = async (id: ID): Promise<EventResult | null> => {
   try {
     const event: Event | null = await db(DB_CONFIG.EVENTS_TABLE)
       .where({ id })

@@ -28,7 +28,7 @@ const knexConfig = {
       user: DB_CONFIG.DB_USER,
       password: DB_CONFIG.DB_PASSWORD,
       database: DB_CONFIG.DB,
-      port: process.env.DB_PORT
+      port: DB_CONFIG.DB_PORT
     },
     pool: {
       min: 2,

@@ -5,6 +5,7 @@ config();
 export const CONFIG = {
   PORT: process.env.PORT || 3000,
   ENVIRONMENT: process.env.ENVIRONMENT || "dev",
+  API_V1_PATH: "/api/v1",
 };
 
 export const DB_CONFIG = {

@@ -7,6 +7,7 @@ import {
   getResult,
 } from "../services/eventService";
 import { ResponseError } from "../models/error";
+import { ID, idSchema } from "../schemas/event.schema";
 
 const handleError = (err: unknown, res: Response) => {
   if (err instanceof ResponseError) {
@@ -17,7 +18,20 @@ const handleError = (err: unknown, res: Response) => {
     console.error(err);
     return res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
+
+const parseId = (req: Request): ID | null => {
+  const { id: id_str } = req.params;
+
+  if (!id_str) {
+    return null;
+  }
+  try {
+    return idSchema.parse(id_str);
+  } catch {
+    return null;
+  }
+};
 
 export const getEventsController = async (req: Request, res: Response) => {
   try {
@@ -29,9 +43,11 @@ export const getEventsController = async (req: Request, res: Response) => {
 };
 
 export const getOneEventController = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = parseId(req);
+
   if (!id) {
     res.status(400).json({ error: "Invalid event ID" });
+    return;
   }
 
   try {
@@ -58,9 +74,11 @@ export const createEventController = async (req: Request, res: Response) => {
 };
 
 export const addVoteController = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = parseId(req);
+
   if (!id) {
     res.status(400).json({ error: "Invalid event ID" });
+    return;
   }
 
   const { name, votes } = req.body;
@@ -74,9 +92,11 @@ export const addVoteController = async (req: Request, res: Response) => {
 };
 
 export const getResultController = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = parseId(req);
+
   if (!id) {
     res.status(400).json({ error: "Invalid event ID" });
+    return;
   }
 
   try {
